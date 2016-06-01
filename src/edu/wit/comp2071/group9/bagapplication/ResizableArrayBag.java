@@ -1,4 +1,4 @@
-package edu.wit.comp2071.group9.application1;
+package edu.wit.comp2071.group9.bagapplication;
 import java.util.Arrays;
 /**
  A class that implements a bag of objects by using an array.

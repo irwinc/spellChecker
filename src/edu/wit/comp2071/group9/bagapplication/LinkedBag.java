@@ -5,7 +5,7 @@
  @author Timothy M. Henry
  @version 4.1
  */
-package edu.wit.comp2071.group9.application1;
+package edu.wit.comp2071.group9.bagapplication;
 public final class LinkedBag<T> implements BagInterface<T>
 {
     private Node firstNode;       // Reference to first node

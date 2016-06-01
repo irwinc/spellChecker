@@ -4,7 +4,7 @@
  @author Timothy M. Henry
  @version 4.0
  */
-package edu.wit.comp2071.group9.application1;
+package edu.wit.comp2071.group9.bagapplication;
 public final class ArrayBag<T> implements BagInterface<T>
 {
     private final T[] bag;

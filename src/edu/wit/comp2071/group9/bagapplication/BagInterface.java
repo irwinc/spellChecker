@@ -3,7 +3,7 @@
  @author Frank M. Carrano
  @version 4.0
  */
-package edu.wit.comp2071.group9.application1;
+package edu.wit.comp2071.group9.bagapplication;
 public interface BagInterface<T>
 {
     /** Gets the current number of entries in this bag.
