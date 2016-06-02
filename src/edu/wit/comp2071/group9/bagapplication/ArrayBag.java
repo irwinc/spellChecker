@@ -11,7 +11,7 @@ public final class ArrayBag<T> implements BagInterface<T>
     private int numberOfEntries;
     private boolean initialized = false;
     private static final int DEFAULT_CAPACITY = 25;
-    private static final int MAX_CAPACITY = 10000;
+    private static final int MAX_CAPACITY = 1000000;
 
     /** Creates an empty bag whose initial capacity is 25. */
     public ArrayBag()

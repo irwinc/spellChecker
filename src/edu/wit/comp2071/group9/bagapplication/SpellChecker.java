@@ -2,7 +2,7 @@
 /**
  * A class that utilized a bag class to compare words between a given file and a dictionary
  @author Connor Irwin
- @author Max agress
+ @author Max Agress
  @author Zack Arnold
  @version 1.0
  */
@@ -13,26 +13,33 @@ import java.io.*;
 public class SpellChecker
 {
 
-    private BagInterface<String> dictionaryBag = null; //dictionaryBag constructor
-    private BagInterface<String> fileBag = null; //fileBag constructor
+    private BagInterface<Object> dictionaryBag = null; //dictionaryBag constructor
+    private BagInterface<Object> fileBag = null; //fileBag constructor
 
     /**
      * adds dictionary file to bag
      * @return dictionaryBag
      */
-    public void dictionaryToBag(BagInterface<String> dictionaryBag)
+    public void dictionaryToBag()
     {
         String  dictionary = "american-english-JL.txt"; //define dictionary file
         String line;
-        try
-        {
+        try {
             FileReader fileReader = new FileReader(dictionary);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while((line = bufferedReader.readLine()) != null) //reads file line-by-line, word-by-word
+            while ((line = bufferedReader.readLine()) != null) //reads file line-by-line, word-by-word
             {
-                dictionaryBag.add(line.toLowerCase());
+                if (!dictionaryBag.add(line.toLowerCase())) //if ArrayBag class is used check to see if array is full
+                {
+                    Object[] temp = dictionaryBag.toArray();
+                    ArrayBag<Object> tempBag = new ArrayBag<>((dictionaryBag.getCurrentSize() * 2)); //expand array
+                    for (int j = 0; j < dictionaryBag.getCurrentSize(); j++)
+                    {
+                        tempBag.add(temp[j]);
+                    }
+                    dictionaryBag = tempBag;
+                }
             }
-
         }
         catch(FileNotFoundException ex)
         {
@@ -44,6 +51,7 @@ public class SpellChecker
             System.out.println("Error reading file");
         }
     }
+
 
     /**
      * adds specified file to bag
@@ -58,27 +66,30 @@ public class SpellChecker
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             while((line = bufferedReader.readLine()) != null)
             {
-                String[] words = line.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+"); //parces out non alpha characters
 
+                if (line.isEmpty())
+                {
+                    continue;
+                }
+                Object[] words = line.replaceAll("-", " ").replaceAll("(http.*\\s|http.*)", "").replaceAll("(www.*\\s|www.*)", "")
+                        .replaceAll("(https.*\\s|https.*)", "").replaceAll("[^a-zA-Z/ ]", "").replaceAll("[/]", " ").toLowerCase()
+                        .replaceAll("(txt)", " ").replaceAll("(doc)", " ").replaceAll("(docx)", " ").replaceAll("(pdf)", " ")
+                        .replaceAll("(ppt)", " ").replaceAll("(pptx)", " ").replaceAll("(odt)", " ").replaceAll("(odf)", " ")
+                        .replaceAll("(mp3)", " ").replaceAll("(mp4)", " ").replaceAll("(avi)", " ").split("\\s+");
+                //parces out non alpha characters, url address, and some file extensions
                 for (int i = 0; i < words.length; i++)
                 {
-//                    if (words[i].equals("\n"))
-//                    {
-//                        words[i].replace("\n", "");
-//                    }
-                    if (fileBag.add(words[i]) == false) //if ArrayBag class is used check to see if array is full
+
+                    if (!fileBag.add(words[i])) //if ArrayBag class is used check to see if array is full
                     {
                         Object[] temp = fileBag.toArray();
-                        ArrayBag tempBag = new ArrayBag((fileBag.getCurrentSize()*2)); //expand array
+                        ArrayBag<Object> tempBag = new ArrayBag<>((fileBag.getCurrentSize()*2)); //expand array
                         for (int j = 0; j < fileBag.getCurrentSize(); j++)
                         {
                             tempBag.add(temp[j]);
                         }
                         fileBag = tempBag;
                     }
-                    //else {
-                       // fileBag.add(words[i]);
-                    //}
                 }
             }
 
@@ -100,17 +111,18 @@ public class SpellChecker
      */
     public void check(String fileName)
     {
-        dictionaryBag = new LinkedBag<>(); //constructs dictionary
-        dictionaryToBag(dictionaryBag);
-        fileBag = new ArrayBag<>(); //constructs BagInterface
+        dictionaryBag = new ArrayBag<>(); //constructs dictionary
+        dictionaryToBag();
+        fileBag = new LinkedBag<>(); //constructs BagInterface
         fileToBag(fileName); //sends specified file to bag
-        Object[] fileArray1 = fileBag.toArray(); //sends bag to array
+        Object[] fileArray = fileBag.toArray(); //sends bag to array
         System.out.println("Incorrectly spelled words in " + fileName + ":");
+
         for (int i = 0; i < fileBag.getCurrentSize(); i++) //prints array of incorrectly spelled words
         {
-            if (!dictionaryBag.contains((String)fileArray1[i]))
+            if (!dictionaryBag.contains(fileArray[i]))
             {
-                System.out.println(fileArray1[i]);
+                System.out.println(fileArray[i]);
             }
         }
     }
