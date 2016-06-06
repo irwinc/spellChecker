@@ -1,9 +1,8 @@
-
 /**
  * A class that utilized a bag class to compare words between a given file and a dictionary
  @author Connor Irwin
  @author Max Agress
- @author Zack Arnold
+ @author Zach Arnold
  @version 1.0
  */
 package edu.wit.comp2071.group9.bagapplication;
@@ -71,12 +70,11 @@ public class SpellChecker
                 {
                     continue;
                 }
-                Object[] words = line.replaceAll("-", " ").replaceAll("(http.*\\s|http.*)", "").replaceAll("(www.*\\s|www.*)", "")
-                        .replaceAll("(https.*\\s|https.*)", "").replaceAll("[^a-zA-Z/ ]", "").replaceAll("[/]", " ").toLowerCase()
-                        .replaceAll("(txt)", " ").replaceAll("(doc)", " ").replaceAll("(docx)", " ").replaceAll("(pdf)", " ")
-                        .replaceAll("(ppt)", " ").replaceAll("(pptx)", " ").replaceAll("(odt)", " ").replaceAll("(odf)", " ")
-                        .replaceAll("(mp3)", " ").replaceAll("(mp4)", " ").replaceAll("(avi)", " ").split("\\s+");
+                Object[] words = line.replaceAll("[0-9]", "").replaceAll("\"", "").replaceAll("(http.*\\s|http.*)", "").replaceAll("(www.*\\s|www.*)", "")
+                        .replaceAll("(https.*\\s|https.*)", "").replaceAll("([^\\x00-\\x7F]+])", "").replaceAll("[\\p{Punct}]", " ").toLowerCase()
+                        .replaceAll("(txt|doc|docx|pdf|ppt|pptx|odt|odf|mp3|mp4|avi)", " ").replaceAll("(html+$)", "").split("\\s+");
                 //parces out non alpha characters, url address, and some file extensions
+                //.replaceAll("(txt|doc|docx|pdf|ppt|pptx|odt|odf|mp3|mp4|avi))", " ")
                 for (int i = 0; i < words.length; i++)
                 {
 
@@ -139,5 +137,6 @@ public class SpellChecker
         s.check("the-lancashire-cotton-famine"); //spell checks file
         System.out.println();
         s.check("sources");
+
     }
 }
